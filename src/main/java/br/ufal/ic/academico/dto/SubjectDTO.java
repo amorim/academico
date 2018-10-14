@@ -1,42 +1,26 @@
-package br.ufal.ic.academico.model;
+package br.ufal.ic.academico.dto;
 
+import br.ufal.ic.academico.model.Course;
+import br.ufal.ic.academico.model.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.Collection;
 
-@Entity
 @Getter
+@RequiredArgsConstructor
 @AllArgsConstructor
-public class Subject {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@ToString
+public class SubjectDTO {
     private Long id;
-
-    @Column(unique = true, nullable = false)
     private String code;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private Long associatedCredits;
-
-    @Column(nullable = false)
     private Long creditsNeeded;
-
-    @Column(nullable = false)
     private boolean isRequired;
-
-    @Column(nullable = false)
     private boolean isPostDegree;
-
-    @OneToMany
     private Collection<Subject> dependencies;
-
-    @ManyToOne
     private Course course;
-
-
 }
