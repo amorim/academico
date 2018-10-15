@@ -1,0 +1,31 @@
+package br.ufal.ic.academico.dao;
+
+import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+
+import java.io.Serializable;
+import java.util.List;
+
+public abstract class GenericDAO<T> extends AbstractDAO<T> {
+
+    public GenericDAO(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
+
+    @Override
+    public T get(Serializable id) throws HibernateException {
+        return super.get(id);
+    }
+
+    @Override
+    public T persist(T entity) throws HibernateException {
+        return super.persist(entity);
+    }
+
+    public void delete(T entity) throws HibernateException {
+        super.currentSession().delete(entity);
+    }
+
+    public abstract List<T> getAll();
+}

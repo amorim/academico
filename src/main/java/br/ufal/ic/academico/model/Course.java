@@ -1,14 +1,15 @@
 package br.ufal.ic.academico.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 
 public class Course {
     @Id
@@ -21,7 +22,9 @@ public class Course {
     @Column(nullable = false)
     private boolean isPostDegree;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+
+    @OneToMany()
+    @JsonManagedReference()
     private Collection<Subject> subjects;
 
 

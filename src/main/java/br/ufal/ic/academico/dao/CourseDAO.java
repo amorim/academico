@@ -1,11 +1,17 @@
 package br.ufal.ic.academico.dao;
 
 import br.ufal.ic.academico.model.Course;
-import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
-public class CourseDAO extends AbstractDAO<Course> {
+import java.util.List;
+
+public class CourseDAO extends GenericDAO<Course> {
     public CourseDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
+    }
+
+    @Override
+    public List<Course> getAll() {
+        return null;
     }
 }

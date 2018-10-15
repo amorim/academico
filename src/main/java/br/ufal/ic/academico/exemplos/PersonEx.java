@@ -1,12 +1,13 @@
 package br.ufal.ic.academico.exemplos;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  *
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @RequiredArgsConstructor
-public class Person {
+public class PersonEx {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +26,7 @@ public class Person {
     
     @Setter private int score;
 
-    public Person(String name) {
+    public PersonEx(String name) {
         this.name = name;
     }
 }

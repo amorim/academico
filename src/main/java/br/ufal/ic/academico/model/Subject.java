@@ -1,14 +1,16 @@
 package br.ufal.ic.academico.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,11 +34,15 @@ public class Subject {
     @Column(nullable = false)
     private boolean isPostDegree;
 
-    @OneToMany
+    @ManyToMany
     private Collection<Subject> dependencies;
 
-    @ManyToOne
+    @ManyToOne()
+    @JsonBackReference()
     private Course course;
+
+    @ManyToMany
+    private List<Person> enrolledPeople;
 
 
 }

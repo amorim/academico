@@ -1,21 +1,15 @@
 package br.ufal.ic.academico.exemplos;
 
 import io.dropwizard.hibernate.UnitOfWork;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -45,7 +39,7 @@ public class MyResource {
         
         log.info("getById: id={}", id);
         
-        Person p = personDAO.get(id);
+        PersonEx p = personDAO.get(id);
         
         return Response.ok(p).build();
     }
@@ -57,7 +51,7 @@ public class MyResource {
         
         log.info("save: {}", entity);
         
-        Person p = new Person(entity.getName());
+        PersonEx p = new PersonEx(entity.getName());
         p.setScore(entity.getNumber());
         
         return Response.ok(personDAO.persist(p)).build();

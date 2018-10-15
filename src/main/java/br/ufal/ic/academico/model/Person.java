@@ -4,18 +4,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Department {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    private Office graduationOffice;
+    @Column(nullable = false)
+    private String name;
 
-    @OneToOne
-    private Office postGraduationOffice;
+    @Column(nullable = false)
+    private boolean isTeacher;
+
+    @ManyToMany
+    private List<Subject> subjects;
 }

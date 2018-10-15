@@ -4,7 +4,7 @@ port: 1
 
 server:
   type: simple
-  applicationContextPath: /academico
+  applicationContextPath: /
   adminContextPath: /admin
   connector:
     type: http
@@ -20,13 +20,22 @@ logging:
   appenders:
     - type: console
 
+# the name of your JDBC driver
+#  driverClass: org.h2.Driver
+#  user: userdb
+#  password: passworddb
+#  url: jdbc:h2:./academicodb
+#  properties:
+#    charSet: UTF-8
+#    hibernate.dialect: org.hibernate.dialect.H2Dialect
+#    hibernate.hbm2ddl.auto: update
 database:
-  # the name of your JDBC driver
-  driverClass: org.h2.Driver
-  user: userdb
-  password: passworddb
-  url: jdbc:h2:./academicodb
+  driverClass: com.mysql.cj.jdbc.Driver
+  user: academico
+  password: academico
+  url: jdbc:mysql://localhost/academico?serverTimezone=UTC&useSSL=false
   properties:
+    poolSize: 10
     charSet: UTF-8
-    hibernate.dialect: org.hibernate.dialect.H2Dialect
-    hibernate.hbm2ddl.auto: update
+    hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate.hbm2ddl.auto: create-drop

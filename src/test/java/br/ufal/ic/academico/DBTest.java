@@ -1,6 +1,6 @@
 package br.ufal.ic.academico;
 
-import br.ufal.ic.academico.exemplos.Person;
+import br.ufal.ic.academico.exemplos.PersonEx;
 import br.ufal.ic.academico.exemplos.PersonDAO;
 import io.dropwizard.testing.junit5.DAOTestExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
@@ -19,7 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public class DBTest {
     
     public DAOTestExtension dbTesting = DAOTestExtension.newBuilder()
-            .addEntityClass(Person.class).build();
+            .addEntityClass(PersonEx.class).build();
     
     private PersonDAO dao;
 
@@ -35,9 +35,9 @@ public class DBTest {
 
         System.out.println("testCRUD");
         
-        Person c1 = new Person("c1");
+        PersonEx c1 = new PersonEx("c1");
         
-        Person saved = dbTesting.inTransaction(() -> dao.persist(c1));
+        PersonEx saved = dbTesting.inTransaction(() -> dao.persist(c1));
         
         assertNotNull(saved);
         assertNotNull(saved.getId());
