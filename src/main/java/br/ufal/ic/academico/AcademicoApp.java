@@ -1,19 +1,18 @@
 package br.ufal.ic.academico;
 
-import br.ufal.ic.academico.dao.CourseDAO;
-import br.ufal.ic.academico.dao.DepartmentDAO;
-import br.ufal.ic.academico.dao.OfficeDAO;
-import br.ufal.ic.academico.dao.SubjectDAO;
+import br.ufal.ic.academico.dao.*;
 import br.ufal.ic.academico.exemplos.MyResource;
-import br.ufal.ic.academico.exemplos.PersonDAO;
+import br.ufal.ic.academico.exemplos.PersonExDAO;
 import br.ufal.ic.academico.exemplos.PersonEx;
 import br.ufal.ic.academico.model.*;
+import br.ufal.ic.academico.resource.StudentResource;
 import br.ufal.ic.academico.resource.UtilResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Willy
  */
 @Slf4j
+@Getter
 public class AcademicoApp extends Application<ConfigApp> {
 
     public static void main(String[] args) throws Exception {
@@ -38,18 +38,28 @@ public class AcademicoApp extends Application<ConfigApp> {
         bootstrap.addBundle(hibernate);
     }
 
+    private PersonDAO personDAO;
+    private SubjectDAO subjectDAO;
+    private DepartmentDAO departmentDAO;
+    private OfficeDAO officeDAO;
+    private CourseDAO courseDAO;
+
     @Override
     public void run(ConfigApp config, Environment environment) {
         
-        final PersonDAO dao = new PersonDAO(hibernate.getSessionFactory());
-        final SubjectDAO subjectDAO = new SubjectDAO(hibernate.getSessionFactory());
-        final DepartmentDAO departmentDAO = new DepartmentDAO(hibernate.getSessionFactory());
-        final OfficeDAO officeDAO = new OfficeDAO(hibernate.getSessionFactory());
-        final CourseDAO courseDAO = new CourseDAO(hibernate.getSessionFactory());
-        final UtilResource utilResource = new UtilResource(subjectDAO, courseDAO, officeDAO, departmentDAO);
+        final PersonExDAO dao = new PersonExDAO(hibernate.getSessionFactory());
+        subjectDAO = new SubjectDAO(hibernate.getSessionFactory());
+        departmentDAO = new DepartmentDAO(hibernate.getSessionFactory());
+        officeDAO = new OfficeDAO(hibernate.getSessionFactory());
+        courseDAO = new CourseDAO(hibernate.getSessionFactory());
+        personDAO = new PersonDAO(hibernate.getSessionFactory());
+        final UtilResource utilResource = new UtilResource(this);
 
         final MyResource resource = new MyResource(dao);
 
+        final StudentResource sr = new StudentResource(this);
+
+        environment.jersey().register(sr);
         environment.jersey().register(utilResource);
         environment.jersey().register(resource);
     }

@@ -2,6 +2,7 @@ package br.ufal.ic.academico.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.apachecommons.CommonsLog;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,5 +22,10 @@ public class Person {
     private boolean isTeacher;
 
     @ManyToMany
-    private List<Subject> subjects;
+    private List<Subject> personSubjects;
+
+    private int credits;
+
+    @ManyToOne
+    private Course personCourse;
 }

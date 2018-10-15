@@ -31,9 +31,6 @@ public class Subject {
     @Column(nullable = false)
     private boolean isRequired;
 
-    @Column(nullable = false)
-    private boolean isPostDegree;
-
     @ManyToMany
     private Collection<Subject> dependencies;
 
@@ -41,8 +38,17 @@ public class Subject {
     @JsonBackReference()
     private Course course;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "personSubjects")
     private List<Person> enrolledPeople;
 
+    public boolean isPostDegree() {
+        return course.isPostDegree();
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Subject))
+            return false;
+        return id.equals(((Subject) o).getId());
+    }
 }

@@ -1,5 +1,6 @@
 package br.ufal.ic.academico.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +15,20 @@ public class Office {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JoinColumn(name="oid",nullable=false)
     private List<Course> courses;
 
     @OneToOne
     private Department department;
+
+    private boolean isPostDegree;
+
+    public boolean isPostDegree() {
+        return isPostDegree;
+    }
+
+
 
 }

@@ -1,5 +1,6 @@
 package br.ufal.ic.academico.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +20,17 @@ public class Course {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private boolean isPostDegree;
-
+    @ManyToOne
+    @JoinColumn(name="oid", nullable = false, insertable = false, updatable = false)
+    @JsonBackReference()
+    private Office office;
 
     @OneToMany()
     @JsonManagedReference()
     private Collection<Subject> subjects;
 
+    public boolean isPostDegree() {
+        return office.isPostDegree();
+    }
 
 }

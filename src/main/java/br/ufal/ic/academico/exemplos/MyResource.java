@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class MyResource {
     
-    private final PersonDAO personDAO;
+    private final PersonExDAO personDAO;
     
     @GET
     @UnitOfWork

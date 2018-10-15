@@ -12,9 +12,9 @@ import java.io.Serializable;
  * @author Willy
  */
 @Slf4j
-public class PersonDAO extends AbstractDAO<PersonEx> {
+public class PersonExDAO extends AbstractDAO<PersonEx> {
     
-    public PersonDAO(SessionFactory sessionFactory) {
+    public PersonExDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 

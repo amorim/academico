@@ -1,7 +1,7 @@
 package br.ufal.ic.academico;
 
 import br.ufal.ic.academico.exemplos.PersonEx;
-import br.ufal.ic.academico.exemplos.PersonDAO;
+import br.ufal.ic.academico.exemplos.PersonExDAO;
 import io.dropwizard.testing.junit5.DAOTestExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import lombok.SneakyThrows;
@@ -21,13 +21,13 @@ public class DBTest {
     public DAOTestExtension dbTesting = DAOTestExtension.newBuilder()
             .addEntityClass(PersonEx.class).build();
     
-    private PersonDAO dao;
+    private PersonExDAO dao;
 
     @BeforeEach
     @SneakyThrows
     public void setUp() {
         System.out.println("setUp");
-        dao = new PersonDAO(dbTesting.getSessionFactory());
+        dao = new PersonExDAO(dbTesting.getSessionFactory());
     }
     
     @Test

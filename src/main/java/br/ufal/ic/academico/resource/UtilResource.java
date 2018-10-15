@@ -1,13 +1,11 @@
 package br.ufal.ic.academico.resource;
 
+import br.ufal.ic.academico.AcademicoApp;
 import br.ufal.ic.academico.dao.CourseDAO;
 import br.ufal.ic.academico.dao.DepartmentDAO;
 import br.ufal.ic.academico.dao.OfficeDAO;
 import br.ufal.ic.academico.dao.SubjectDAO;
-import br.ufal.ic.academico.model.Course;
-import br.ufal.ic.academico.model.Department;
-import br.ufal.ic.academico.model.Office;
-import br.ufal.ic.academico.model.Subject;
+import br.ufal.ic.academico.model.*;
 import io.dropwizard.hibernate.UnitOfWork;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +23,7 @@ import java.util.ArrayList;
 @Produces(MediaType.APPLICATION_JSON)
 public class UtilResource {
 
-    private final SubjectDAO subjectDAO;
-    private final CourseDAO courseDAO;
-    private final OfficeDAO officeDAO;
-    private final DepartmentDAO departmentDAO;
+    private final AcademicoApp app;
 
     @GET
     @UnitOfWork
@@ -36,7 +31,7 @@ public class UtilResource {
 
         log.info("getAll");
 
-        return Response.ok(subjectDAO.getAll()).build();
+        return Response.ok(app.getSubjectDAO().getAll()).build();
     }
 
     @GET
@@ -47,11 +42,17 @@ public class UtilResource {
         log.info("loading all data into database");
         Subject s;
 
+        Office o = new Office();
+        o.setPostDegree(false);
+
 
         Course c = new Course();
         c.setName("Ciência da Computacão v2011");
-        c.setPostDegree(false);
-        courseDAO.persist(c);
+
+        ArrayList<Course> courses = new ArrayList<>();
+        courses.add(c);
+        o.setCourses(courses);
+        app.getOfficeDAO().persist(o);
 
         s = new Subject();
         s.setName("Programação 1");
@@ -59,11 +60,10 @@ public class UtilResource {
         s.setCreditsNeeded((long)0);
         s.setAssociatedCredits((long)100);
         s.setDependencies(new ArrayList<>());
-        s.setPostDegree(false);
         s.setRequired(true);
-        subjectDAO.persist(s);
         s.setCourse(c);
         all.add(s);
+        app.getSubjectDAO().persist(s);
 
         s = new Subject();
         s.setName("Teste de Software");
@@ -73,10 +73,9 @@ public class UtilResource {
         ArrayList<Subject> thisdeps = new ArrayList<>();
         thisdeps.add(all.get(0));
         s.setDependencies(thisdeps);
-        s.setPostDegree(false);
         s.setRequired(true);
         s.setCourse(c);
-        subjectDAO.persist(s);
+        app.getSubjectDAO().persist(s);
 
         all.add(s);
 
@@ -86,10 +85,9 @@ public class UtilResource {
         s.setCreditsNeeded((long)100);
         s.setAssociatedCredits((long)200);
         s.setDependencies(thisdeps);
-        s.setPostDegree(false);
         s.setRequired(true);
         s.setCourse(c);
-        subjectDAO.persist(s);
+        app.getSubjectDAO().persist(s);
         all.add(s);
 
         s = new Subject();
@@ -98,30 +96,28 @@ public class UtilResource {
         s.setCreditsNeeded((long)100);
         s.setAssociatedCredits((long)200);
         s.setDependencies(thisdeps);
-        s.setPostDegree(false);
         s.setRequired(false);
         s.setCourse(c);
-        subjectDAO.persist(s);
+        app.getSubjectDAO().persist(s);
 
         all.add(s);
 
         c.setSubjects(all);
-        courseDAO.persist(c);
+        app.getCourseDAO().persist(c);
 
 
-        Office o = new Office();
-        ArrayList<Course> courses = new ArrayList<>();
-        courses.add(c);
-        o.setCourses(courses);
-        officeDAO.persist(o);
 
 
         Department d = new Department();
         d.setGraduationOffice(o);
         o.setDepartment(d);
-        departmentDAO.persist(d);
+        app.getDepartmentDAO().persist(d);
 
+        Person p = new Person();
+        p.setName("Lucas Amorim");
+        p.setCredits(0);
 
+        app.getPersonDAO().persist(p);
 
         return Response.noContent().build();
     }
