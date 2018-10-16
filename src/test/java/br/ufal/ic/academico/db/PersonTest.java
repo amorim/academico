@@ -37,8 +37,8 @@ class PersonTest {
     }
 
     private Person create() {
-        final Person student = new Person(null, "Gabriel", false, null, 0, null, null);
-        final Person saved = dbTesting.inTransaction(() -> dao.persist(student));
+        Person student = new Person(null, "Gabriel", false, null, 0, null, null);
+        Person saved = dbTesting.inTransaction(() -> dao.persist(student));
         assertNotNull(saved, "person not saved");
         assertNotNull(saved.getId(), "person saved but did not auto generate id");
         assertEquals(student.getId(), saved.getId(), "different ids");
@@ -61,7 +61,7 @@ class PersonTest {
         dbTesting.inTransaction(() -> courseDAO.persist(course));
         student.setPersonCourse(course);
 
-        final Person updated = dbTesting.inTransaction(() -> dao.persist(student));
+        Person updated = dbTesting.inTransaction(() -> dao.persist(student));
         assertEquals(student.getId(), updated.getId(), "different ids");
         assertEquals(student.getPersonCourse(), updated.getPersonCourse(), "update was not persisted");
     }

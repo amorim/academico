@@ -35,8 +35,8 @@ class SubjectTest {
     }
 
     private Subject create() {
-        final Subject subject = new Subject(null, "teste", "Testes", 100L, 0L, false, null, null, null, null);
-        final Subject saved = dbTesting.inTransaction(() -> dao.persist(subject));
+        Subject subject = new Subject(null, "teste", "Testes", 100L, 0L, false, null, null, null, null);
+        Subject saved = dbTesting.inTransaction(() -> dao.persist(subject));
 
         assertNotNull(saved, "error during subject saving");
         assertNotNull(saved.getId(), "no id during persistence");
@@ -63,7 +63,7 @@ class SubjectTest {
     private void update(Subject subject) {
         subject.setName("Teste de Software");
 
-        final Subject updated = dbTesting.inTransaction(() -> dao.persist(subject));
+        Subject updated = dbTesting.inTransaction(() -> dao.persist(subject));
         assertEquals(subject.getId(), updated.getId(), "different ids");
         assertEquals(subject.getName(), updated.getName(), "different names");
         assertEquals(subject.getAssociatedCredits(), updated.getAssociatedCredits(), "different associated credits");

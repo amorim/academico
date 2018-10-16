@@ -41,9 +41,9 @@ class OfficeTest {
     }
 
     private Office create() {
-        final Office office = new Office();
+        Office office = new Office();
         office.setCourses(new ArrayList<>());
-        final Office saved = dbTesting.inTransaction(() -> dao.persist(office));
+        Office saved = dbTesting.inTransaction(() -> dao.persist(office));
 
         assertNotNull(saved, "office could not be saved");
         assertNotNull(saved.getId(), "persistence failed");
@@ -65,7 +65,7 @@ class OfficeTest {
         dbTesting.inTransaction(() -> courseDAO.persist(course));
         office.getCourses().add(course);
 
-        final Office updated = dbTesting.inTransaction(() -> dao.persist(office));
+        Office updated = dbTesting.inTransaction(() -> dao.persist(office));
         assertEquals(office.getId(), updated.getId(), "different ids");
         assertEquals(office.getCourses(), updated.getCourses(), "different courses");
     }

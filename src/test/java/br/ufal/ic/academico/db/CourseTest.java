@@ -38,10 +38,10 @@ class CourseTest {
     }
 
     private Course create() {
-        final Course course = new Course();
+        Course course = new Course();
         course.setName("CCOMP");
         course.setSubjects(new ArrayList<>());
-        final Course saved = dbTesting.inTransaction(() -> dao.persist(course));
+        Course saved = dbTesting.inTransaction(() -> dao.persist(course));
 
         assertNotNull(saved, "course not saved");
         assertNotNull(saved.getId(), "persistence didnt create an id");
@@ -59,10 +59,10 @@ class CourseTest {
     }
 
     private void update(Course course) {
-        final Subject subject = new Subject(null, "teste", "Testes", 100L, 0L, false, null, null, null, null);
+        Subject subject = new Subject(null, "teste", "Testes", 100L, 0L, false, null, null, null, null);
         dbTesting.inTransaction(() -> subjectDAO.persist(subject));
         course.getSubjects().add(subject);
-        final Course updated = dbTesting.inTransaction(() -> dao.persist(course));
+        Course updated = dbTesting.inTransaction(() -> dao.persist(course));
         assertEquals(course.getId(), updated.getId(), "different ids");
         assertEquals(course.getSubjects(), updated.getSubjects(), "different subjects");
     }

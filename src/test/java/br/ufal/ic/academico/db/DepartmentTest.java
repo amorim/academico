@@ -36,8 +36,8 @@ class DepartmentTest {
     }
 
     private Department create() {
-        final Department department = new Department();
-        final Department saved = dbTesting.inTransaction(() -> dao.persist(department));
+        Department department = new Department();
+        Department saved = dbTesting.inTransaction(() -> dao.persist(department));
 
         assertNotNull(saved, "department not saved");
         assertNotNull(saved.getId(), "no id during persistence");
@@ -57,14 +57,14 @@ class DepartmentTest {
     }
 
     private void update(Department department) {
-        final Office postDegreeOffice = new Office();
+        Office postDegreeOffice = new Office();
         dbTesting.inTransaction(() -> officeDAO.persist(postDegreeOffice));
         department.setPostGraduationOffice(postDegreeOffice);
-        final Office degreeOffice = new Office();
+        Office degreeOffice = new Office();
         dbTesting.inTransaction(() -> officeDAO.persist(degreeOffice));
         department.setGraduationOffice(degreeOffice);
 
-        final Department updated = dbTesting.inTransaction(() -> dao.persist(department));
+        Department updated = dbTesting.inTransaction(() -> dao.persist(department));
         assertEquals(department.getId(), updated.getId(), "id changed during persistence update");
         assertEquals(department.getPostGraduationOffice(), updated.getPostGraduationOffice(), "during update, post graduation office changed");
         assertEquals(department.getGraduationOffice(), updated.getGraduationOffice(), "during update, undergraduation office changed");
