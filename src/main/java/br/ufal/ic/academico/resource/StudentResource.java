@@ -1,6 +1,7 @@
 package br.ufal.ic.academico.resource;
 
 import br.ufal.ic.academico.AcademicoApp;
+import br.ufal.ic.academico.dto.PersonDTO;
 import br.ufal.ic.academico.model.Person;
 import br.ufal.ic.academico.model.Subject;
 import br.ufal.ic.academico.util.RestResponse;
@@ -8,10 +9,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
@@ -23,6 +21,26 @@ import java.util.Collection;
 public class StudentResource {
 
     final AcademicoApp app;
+
+    @GET
+    @UnitOfWork
+    @Path("/{id}")
+    public Response getInfo(@PathParam("id") Long id) {
+        Person p = app.getPersonDAO().get(id);
+        if (p == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity(new RestResponse(Response.Status.NOT_FOUND.getStatusCode(), "Student not found")).build();
+        }
+        if (p.isTeacher())
+            return Response.status(Response.Status.NOT_FOUND).entity(new RestResponse(Response.Status.NOT_FOUND.getStatusCode(),"This id becomes to a teacher")).build();
+        PersonDTO personDTO = new PersonDTO();
+        personDTO.setName(p.getName());
+        personDTO.setId(p.getId());
+        personDTO.setCredits(p.getCredits());
+        personDTO.setPersonSubjects(p.getPersonSubjects());
+        personDTO.setTeacher(false);
+        return Response.ok().entity(personDTO).build();
+    }
+
 
     @POST
     @UnitOfWork
@@ -55,6 +73,7 @@ public class StudentResource {
         log.info("student can now enroll");
         student.getPersonSubjects().add(s);
         student.setPersonCourse(s.getCourse());
+        student.setCredits((int)(student.getCredits() + s.getAssociatedCredits()));
         app.getPersonDAO().persist(student);
         return Response.ok().entity(new RestResponse(Response.Status.OK.getStatusCode(), "Student is now enrolled")).build();
     }

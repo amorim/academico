@@ -1,0 +1,12 @@
+{
+  "id": 1,
+  "code": "teste",
+  "name": "Testes",
+  "associatedCredits": 100,
+  "creditsNeeded": 0,
+  "required": false,
+  "dependencies": null,
+  "course": null,
+  "enrolledPeople": null,
+  "subjectTeacher": null
+}

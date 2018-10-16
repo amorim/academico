@@ -10,8 +10,8 @@ public class CourseDAO extends GenericDAO<Course> {
         super(sessionFactory);
     }
 
-    @Override
+
     public List<Course> getAll() {
-        return null;
+        return super.getAll(Course.class);
     }
 }

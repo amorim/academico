@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "name": "Lucas",
+  "teacher": false,
+  "personSubjects": null,
+  "credits": 0,
+  "personCourse": null,
+  "teacherSubjects": null
+}

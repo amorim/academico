@@ -1,66 +1,46 @@
 package br.ufal.ic.academico.resource;
 
-import br.ufal.ic.academico.AcademicoApp;
-import br.ufal.ic.academico.dao.CourseDAO;
-import br.ufal.ic.academico.dao.DepartmentDAO;
-import br.ufal.ic.academico.dao.OfficeDAO;
-import br.ufal.ic.academico.dao.SubjectDAO;
 import br.ufal.ic.academico.model.*;
-import io.dropwizard.hibernate.UnitOfWork;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
-@Path("util")
 @Slf4j
-@RequiredArgsConstructor
-@Produces(MediaType.APPLICATION_JSON)
-public class UtilResource {
+class BaseResourceTest {
 
-    private final AcademicoApp app;
 
-    @GET
-    @UnitOfWork
-    public Response getAll() {
+    ArrayList<Subject> subjects = new ArrayList<>();
+    ArrayList<Office> offices = new ArrayList<>();
+    ArrayList<Department> departments = new ArrayList<>();
+    ArrayList<Person> people = new ArrayList<>();
+    ArrayList<Course> courses = new ArrayList<>();
 
-        log.info("getAll");
+    void setUp() {
+        AtomicLong idgen = new AtomicLong(1);
+        log.info("setting up");
 
-        return Response.ok(app.getSubjectDAO().getAll()).build();
-    }
-
-    @GET
-    @Path("loadData")
-    @UnitOfWork
-    public Response loadData() {
-        ArrayList<Subject> all = new ArrayList<>();
         log.info("loading all data into database");
         Subject s;
 
         Office o = new Office();
         o.setPostDegree(false);
-
+        o.setId(idgen.getAndIncrement());
+        offices.add(o);
 
         Course c = new Course();
         c.setName("Ciência da Computacão v2011");
-
-        ArrayList<Course> courses = new ArrayList<>();
+        c.setId(idgen.getAndIncrement());
+        c.setOffice(o);
         courses.add(c);
         o.setCourses(courses);
-        app.getOfficeDAO().persist(o);
 
         Person p;
         p = new Person();
         p.setName("Willy");
         p.setTeacher(true);
-        app.getPersonDAO().persist(p);
-
+        p.setPersonSubjects(new ArrayList<>());
+        p.setId(idgen.getAndIncrement());
+        people.add(p);
         s = new Subject();
         s.setName("Programação 1");
         s.setCode("COMP201");
@@ -70,8 +50,8 @@ public class UtilResource {
         s.setRequired(true);
         s.setCourse(c);
         s.setSubjectTeacher(p);
-        all.add(s);
-        app.getSubjectDAO().persist(s);
+        s.setId(idgen.getAndIncrement());
+        subjects.add(s);
 
         s = new Subject();
         s.setName("Teste de Software");
@@ -79,13 +59,13 @@ public class UtilResource {
         s.setCreditsNeeded((long) 100);
         s.setAssociatedCredits((long) 100);
         ArrayList<Subject> thisdeps = new ArrayList<>();
-        thisdeps.add(all.get(0));
+        thisdeps.add(subjects.get(0));
         s.setDependencies(thisdeps);
         s.setRequired(true);
+        s.setId(idgen.getAndIncrement());
         s.setCourse(c);
-        app.getSubjectDAO().persist(s);
 
-        all.add(s);
+        subjects.add(s);
 
         s = new Subject();
         s.setName("Compiladores");
@@ -95,8 +75,8 @@ public class UtilResource {
         s.setDependencies(thisdeps);
         s.setRequired(true);
         s.setCourse(c);
-        app.getSubjectDAO().persist(s);
-        all.add(s);
+        s.setId(idgen.getAndIncrement());
+        subjects.add(s);
 
         s = new Subject();
         s.setName("Aprendizagem de Máquina");
@@ -106,25 +86,23 @@ public class UtilResource {
         s.setDependencies(thisdeps);
         s.setRequired(false);
         s.setCourse(c);
-        app.getSubjectDAO().persist(s);
+        s.setId(idgen.getAndIncrement());
+        subjects.add(s);
 
-        all.add(s);
-
-        c.setSubjects(all);
-        app.getCourseDAO().persist(c);
+        c.setSubjects(subjects);
 
 
         Department d = new Department();
         d.setGraduationOffice(o);
         o.setDepartment(d);
-        app.getDepartmentDAO().persist(d);
-        app.getOfficeDAO().persist(o);
+        d.setId(idgen.getAndIncrement());
+        departments.add(d);
 
         p = new Person();
         p.setName("Lucas Amorim");
         p.setCredits(0);
-
-        app.getPersonDAO().persist(p);
-        return Response.noContent().build();
+        p.setPersonSubjects(new ArrayList<>());
+        people.add(p);
+        p.setId(idgen.getAndIncrement());
     }
 }

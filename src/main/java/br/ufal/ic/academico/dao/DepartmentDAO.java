@@ -1,6 +1,7 @@
 package br.ufal.ic.academico.dao;
 
 import br.ufal.ic.academico.model.Department;
+import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -11,8 +12,8 @@ public class DepartmentDAO extends GenericDAO<Department> {
         super(sessionFactory);
     }
 
-    @Override
+
     public List<Department> getAll() {
-        return null;
+        return super.getAll(Department.class);
     }
 }

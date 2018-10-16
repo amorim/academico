@@ -10,8 +10,7 @@ public class PersonDAO extends GenericDAO<Person> {
         super(sessionFactory);
     }
 
-    @Override
     public List<Person> getAll() {
-        return null;
+        return super.getAll(Person.class);
     }
 }

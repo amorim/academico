@@ -11,8 +11,8 @@ public class OfficeDAO extends GenericDAO<Office> {
         super(sessionFactory);
     }
 
-    @Override
+
     public List<Office> getAll() {
-        return null;
+        return super.getAll(Office.class);
     }
 }

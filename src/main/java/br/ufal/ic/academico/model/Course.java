@@ -1,8 +1,11 @@
 package br.ufal.ic.academico.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,7 +14,8 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,13 +26,14 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name="oid", nullable = false, insertable = false, updatable = false)
-    @JsonBackReference()
+    @JsonBackReference(value="office")
     private Office office;
 
     @OneToMany()
-    @JsonManagedReference()
+    @JsonManagedReference(value="course")
     private Collection<Subject> subjects;
 
+    @JsonIgnore
     public boolean isPostDegree() {
         return office.isPostDegree();
     }

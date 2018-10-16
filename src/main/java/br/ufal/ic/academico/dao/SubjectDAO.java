@@ -13,8 +13,7 @@ public class SubjectDAO extends GenericDAO<Subject> {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public List<Subject> getAll() {
-        return (List<Subject>) currentSession().createQuery("from Subject").list();
+        return super.getAll(Subject.class);
     }
 }
