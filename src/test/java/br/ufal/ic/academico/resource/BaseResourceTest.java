@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
-class BaseResourceTest {
+public class BaseResourceTest {
 
 
     ArrayList<Subject> subjects = new ArrayList<>();

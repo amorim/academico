@@ -22,7 +22,7 @@ public class Office {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference(value="office")
-    @JoinColumn(name="oid",nullable=false)
+    @JoinColumn(name="oid")
     private List<Course> courses;
 
     @OneToOne

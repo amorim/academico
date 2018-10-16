@@ -25,7 +25,7 @@ public class Course {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="oid", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name="oid", insertable = false, updatable = false)
     @JsonBackReference(value="office")
     private Office office;
 

@@ -1,7 +1,6 @@
 package br.ufal.ic.academico.resource;
 
-import br.ufal.ic.academico.dao.PersonDAO;
-import br.ufal.ic.academico.model.*;
+import br.ufal.ic.academico.model.Person;
 import br.ufal.ic.academico.util.RestResponse;
 import ch.qos.logback.classic.Level;
 import io.dropwizard.logging.BootstrapLogging;
@@ -12,25 +11,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Slf4j
 @ExtendWith(DropwizardExtensionsSupport.class)
-class StudentTest extends BaseResourceTest {
+class StudentResourceTest extends BaseResourceTest {
     static {
         BootstrapLogging.bootstrap(Level.DEBUG);
     }
-    StudentTest() {
+    StudentResourceTest() {
         fakeApp.setPersonDAO(MockDAO.PERSONDAO_MOCK);
         fakeApp.setSubjectDAO(MockDAO.SUBJECTDAO_MOCK);
     }
@@ -65,8 +59,8 @@ class StudentTest extends BaseResourceTest {
         log.info("enrolling student in subject");
         RestResponse r = rule.target("/student/" + people.get(1).getId() + "/enroll/subject/" + subjects.get(0).getId()).request().post(null, RestResponse.class);
         assertNotNull(r);
-        assertEquals(r.getCode(), Response.Status.OK.getStatusCode());
-        assertEquals(r.getReason(), "Student is now enrolled");
+        assertEquals(Response.Status.OK.getStatusCode(), r.getCode());
+        assertEquals( "Student is now enrolled", r.getReason());
     }
 
 

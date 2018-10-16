@@ -1,9 +1,7 @@
 package br.ufal.ic.academico.resource;
 
-import br.ufal.ic.academico.model.*;
-import br.ufal.ic.academico.util.RestResponse;
+import br.ufal.ic.academico.model.Department;
 import ch.qos.logback.classic.Level;
-import com.codahale.metrics.MetricRegistryListener;
 import io.dropwizard.logging.BootstrapLogging;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.testing.junit5.ResourceExtension;
@@ -13,11 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.ws.rs.core.Response;
-
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,11 +19,11 @@ import static org.mockito.Mockito.when;
 
 @Slf4j
 @ExtendWith(DropwizardExtensionsSupport.class)
-class DepartmentTest extends BaseResourceTest {
+class DepartmentResourceTest extends BaseResourceTest {
     static {
         BootstrapLogging.bootstrap(Level.DEBUG);
     }
-    DepartmentTest() {
+    DepartmentResourceTest() {
         fakeApp.setDepartmentDAO(MockDAO.DEPARTMENTDAO_MOCK);
     }
     private AppFaker fakeApp = new AppFaker();
@@ -55,9 +48,9 @@ class DepartmentTest extends BaseResourceTest {
         assertThat("department array size", saved.length, greaterThan(0));
         Department d = saved[0];
         assertNotNull(d, "department is null");
-        assertEquals(d.getId(), expected.getId(), "ids of departments do not match");
-        assertEquals(d.getGraduationOffice().getId(), expected.getGraduationOffice().getId(), "offices of departments do not match");
-
+        assertEquals(expected.getId(), d.getId(), "ids of departments do not match");
+        assertEquals(expected.getGraduationOffice().getId(),d.getGraduationOffice().getId(), "offices of departments do not match");
+        assertEquals(expected.getPostGraduationOffice(), d.getPostGraduationOffice(), "post degree offices of departments do not match");
     }
 
 

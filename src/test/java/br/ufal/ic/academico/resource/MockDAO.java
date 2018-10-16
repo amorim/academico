@@ -5,14 +5,14 @@ import br.ufal.ic.academico.dao.*;
 import static org.mockito.Mockito.mock;
 
 public class MockDAO {
-    static PersonDAO PERSONDAO_MOCK = mock(PersonDAO.class);
+    public static PersonDAO PERSONDAO_MOCK = mock(PersonDAO.class);
 
-    static CourseDAO COURSEDAO_MOCK = mock(CourseDAO.class);
+    public static CourseDAO COURSEDAO_MOCK = mock(CourseDAO.class);
 
-    static OfficeDAO OFFICEDAO_MOCK = mock(OfficeDAO.class);
+    public static OfficeDAO OFFICEDAO_MOCK = mock(OfficeDAO.class);
 
-    static SubjectDAO SUBJECTDAO_MOCK = mock(SubjectDAO.class);
+    public static SubjectDAO SUBJECTDAO_MOCK = mock(SubjectDAO.class);
 
-    static DepartmentDAO DEPARTMENTDAO_MOCK = mock(DepartmentDAO.class);
+    public static DepartmentDAO DEPARTMENTDAO_MOCK = mock(DepartmentDAO.class);
 
 }

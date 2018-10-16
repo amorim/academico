@@ -31,7 +31,7 @@ public class StudentResource {
             return Response.status(Response.Status.NOT_FOUND).entity(new RestResponse(Response.Status.NOT_FOUND.getStatusCode(), "Student not found")).build();
         }
         if (p.isTeacher())
-            return Response.status(Response.Status.NOT_FOUND).entity(new RestResponse(Response.Status.NOT_FOUND.getStatusCode(),"This id becomes to a teacher")).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("This id becomes to a teacher")).build();
         PersonDTO personDTO = new PersonDTO();
         personDTO.setName(p.getName());
         personDTO.setId(p.getId());
@@ -53,31 +53,45 @@ public class StudentResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("This id becomes to a teacher. Enrollment is only allowed for students.")).build();
         Subject s = app.getSubjectDAO().get(subjectId);
         if (s == null)
-            return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("Subject not found")).build();
-        if (student.getPersonCourse() != null)
-            if (!student.getPersonCourse().getId().equals(s.getCourse().getId()))
-                return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("Student course doesn\'t match subject course")).build();
-        for (Subject subject : student.getPersonSubjects())
-            if (s.getId().equals(subject.getId()))
+            return Response.status(Response.Status.NOT_FOUND).entity(new RestResponse("Subject not found")).build();
+        if (student.getPersonCourse() != null) {
+            if (!s.getCourse().getOffice().getDepartment().getId().equals(student.getPersonCourse().getOffice().getDepartment().getId())) {
+                log.error("Student department doesn\'t match subject department");
+                return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("Student department doesn\'t match subject department")).build();
+            }
+        }
+        for (Subject subject : student.getPersonSubjects()) {
+            if (s.getId().equals(subject.getId())) {
+                log.error("Student is already enrolled to this subject.");
                 return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("Student is already enrolled to this subject.")).build();
-        if (!s.isPostDegree() && student.getPersonCourse() != null && student.getPersonCourse().isPostDegree())
+            }
+        }
+        if (!s.isPostDegree() && student.getPersonCourse() != null && student.getPersonCourse().isPostDegree()) {
+            log.error("Post-degree student cannot enroll in an undergraduation subject");
             return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("Post-degree student cannot enroll in an undergraduation subject")).build();
-        if (student.getPersonCourse() != null && !student.getPersonCourse().isPostDegree() && s.isPostDegree())
-            if (student.getCredits() < 170)
+        }
+        if (student.getPersonCourse() != null && !student.getPersonCourse().isPostDegree() && s.isPostDegree()) {
+            if (student.getCredits() < 170) {
+                log.error("For enrolling in a post-graduation subject, you need at least 170 credits.");
                 return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("For enrolling in a post-graduation subject, you need at least 170 credits.")).build();
-        if (s.getCreditsNeeded() > student.getCredits())
+            }
+        }
+        if (s.getCreditsNeeded() > student.getCredits()) {
+            log.error("Not enough credits to enroll in this subject");
             return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("Not enough credits to enroll in this subject")).build();
+        }
         Collection<Subject> deps = s.getDependencies();
-        if (!student.getPersonSubjects().containsAll(deps))
+        if (!student.getPersonSubjects().containsAll(deps)) {
+            log.error("You have to complete pending required subjects before enrolling into this subject");
             return Response.status(Response.Status.BAD_REQUEST).entity(new RestResponse("You have to complete pending required subjects before enrolling into this subject")).build();
+        }
         log.info("student can now enroll");
         student.getPersonSubjects().add(s);
         student.setPersonCourse(s.getCourse());
-        student.setCredits((int)(student.getCredits() + s.getAssociatedCredits()));
+        student.setCredits((int) (student.getCredits() + s.getAssociatedCredits()));
         app.getPersonDAO().persist(student);
         return Response.ok().entity(new RestResponse(Response.Status.OK.getStatusCode(), "Student is now enrolled")).build();
     }
-
 
 
 }
